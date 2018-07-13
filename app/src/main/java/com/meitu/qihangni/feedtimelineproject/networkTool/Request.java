@@ -1,4 +1,8 @@
-package com.meitu.qihangni.feedtimelineproject.networktool;
+package com.meitu.qihangni.feedtimelineproject.networkTool;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +20,7 @@ import java.util.List;
  * @author nqh 2018/7/11
  */
 public class Request {
+    private final String TAG = this.getClass().getName();
 
     //设置超时
     private final static int CONNECT_TIME_OUT_MILLISECOND = 10000;
@@ -75,6 +81,7 @@ public class Request {
         if (mMethod == HttpMethod.POST) {
             post();
         } else if (mMethod == HttpMethod.GET) {
+
             get();
         }
         return response(mConnection);
@@ -84,6 +91,7 @@ public class Request {
      * get请求
      */
     private void get() throws IOException {
+        Log.i(TAG, "   " + mUrl);
         URL requestUrl = new URL(getUrl(mUrl));
         mConnection = (HttpURLConnection) requestUrl.openConnection();
         mConnection.setRequestMethod(String.valueOf(mMethod));
@@ -183,28 +191,10 @@ public class Request {
                 .method(connection.getRequestMethod())
                 .contentType(connection.getContentType())
                 .contentLength(connection.getContentLength())
-                .body(getResponseBody(connection.getInputStream()))
+                .content(connection.getContent())
                 .build();
         connection.disconnect();
         return resp;
-    }
-
-    /**
-     * 获取响应的数据
-     */
-    private String getResponseBody(InputStream stream) {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-        String line;
-        try {
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append("\r\n");
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 
     public static class Builder {

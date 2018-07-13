@@ -1,6 +1,7 @@
-package com.meitu.qihangni.feedtimelineproject.networktool;
+package com.meitu.qihangni.feedtimelineproject.networkTool;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -16,6 +17,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Response> {
     private HttpURLConnection mConnection;
     private HttpCallback mHttpCallback;
     private Exception mException;
+    private final String TAG = this.getClass().getName();
 
     public HttpAsyncTask(Request request, HttpURLConnection connection, HttpCallback httpCallback) {
         this.mConnection = connection;
@@ -37,6 +39,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Response> {
 
     @Override
     protected void onPostExecute(Response response) {
+        Log.i(TAG, response.toString());
         super.onPostExecute(response);
         if (response == null) {
             if (mHttpCallback != null) {
@@ -48,6 +51,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Response> {
             }
         } else {
             if (mHttpCallback != null) {
+
                 mHttpCallback.onComplete(response);
             }
         }

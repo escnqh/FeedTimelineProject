@@ -1,4 +1,4 @@
-package com.meitu.qihangni.feedtimelineproject.networktool;
+package com.meitu.qihangni.feedtimelineproject.networkTool;
 
 /**
  * 对外的定义响应结果的接口

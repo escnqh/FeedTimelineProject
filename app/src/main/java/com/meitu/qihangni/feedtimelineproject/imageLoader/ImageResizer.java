@@ -25,10 +25,8 @@ class ImageResizer {
 
     public Bitmap decodeSampleBitmapFromFileDescriptor(FileDescriptor descriptor, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFileDescriptor(descriptor, null, options);
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
+        options.inJustDecodeBounds = true;
         return BitmapFactory.decodeFileDescriptor(descriptor, null, options);
     }
 

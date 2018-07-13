@@ -1,4 +1,4 @@
-package com.meitu.qihangni.feedtimelineproject.jsontool;
+package com.meitu.qihangni.feedtimelineproject.jsonDecoder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,6 +25,7 @@ public class JsonLoader {
     public static <T> T parseJsonToObject(Class<T> cls, JSONObject jsonObject) {
         T t = null;
         try {
+            //捕获实例化异常
             t = cls.newInstance();
             // 反射获取所有方法
             Method[] methods = cls.getDeclaredMethods();
@@ -80,18 +81,23 @@ public class JsonLoader {
                                     decodeList(list, jsonArray, listType);
                                     method.invoke(t, new Object[]{list});
                                 }
-                            } else {
+                            }
+//                            else if (type==Object.class){
+//                                //如果是类
+//                                method.invoke(t, new Object[]{parseJsonToObject(type, jsonObject.optJSONObject(attributeName))});
+//                            }
+                            else {
                                 //如果是类
                                 method.invoke(t, new Object[]{parseJsonToObject(type, jsonObject.optJSONObject(attributeName))});
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+//                            e.printStackTrace();
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return t;
     }

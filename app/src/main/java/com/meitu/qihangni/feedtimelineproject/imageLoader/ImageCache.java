@@ -96,7 +96,7 @@ class ImageCache {
             if (snapshot!=null){
                 FileInputStream fileInputStream = (FileInputStream) snapshot.getInputStream(DISK_CACHE_INDEX);
                 FileDescriptor fileDescriptor = fileInputStream.getFD();
-                bitmap = imageResizer.decodeSampleBitmapFromFileDescriptor(fileDescriptor,reqWidth,reqHeight);
+                bitmap = imageResizer.decodeSampleBitmapFromFileDescriptor(fileDescriptor, reqWidth, reqHeight);
                 if (bitmap!=null){
                     addBitmapIntoMemoryCache(url,bitmap);
                 }

@@ -1,4 +1,4 @@
-package com.meitu.qihangni.feedtimelineproject.jsontool;
+package com.meitu.qihangni.feedtimelineproject.jsonDecoder;
 
 import java.util.List;
 

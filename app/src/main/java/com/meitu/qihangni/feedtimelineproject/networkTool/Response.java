@@ -1,4 +1,6 @@
-package com.meitu.qihangni.feedtimelineproject.networktool;
+package com.meitu.qihangni.feedtimelineproject.networkTool;
+
+import java.io.InputStream;
 
 /**
  * 响应结果实体
@@ -12,7 +14,7 @@ public class Response {
     private final String mMethod;
     private final String mContentType;
     private final int mContentLength;
-    private final String mBody;
+    private final Object mContent;
 
     public Response(Builder builder) {
         this.mCode = builder.code;
@@ -20,7 +22,7 @@ public class Response {
         this.mMethod = builder.method;
         this.mContentType = builder.contentType;
         this.mContentLength = builder.contentLength;
-        this.mBody = builder.body;
+        this.mContent = builder.content;
     }
 
     public int getCode() {
@@ -47,8 +49,8 @@ public class Response {
         return this.mCode >= 200 && this.mCode < 300;
     }
 
-    public String getBody() {
-        return mBody;
+    public Object getContent() {
+        return mContent;
     }
 
     public static class Builder {
@@ -57,7 +59,7 @@ public class Response {
         private String method;
         private String contentType;
         private int contentLength;
-        private String body;
+        private Object content;
 
         public Builder code(int code) {
             this.code = code;
@@ -84,8 +86,9 @@ public class Response {
             return this;
         }
 
-        public Builder body(String body) {
-            this.body = body;
+
+        public Builder content(Object object) {
+            this.content = object;
             return this;
         }
 
