@@ -22,7 +22,7 @@ import java.util.List;
 public class ListViewAdapter extends BaseAdapter {
     private final Context mContext;
     private static final int MESSAGE_POST_RESULT = 1;
-    private final List<PageContent> mPageContentList;
+    private final List<PageContentBean> mPageContentBeanList;
     public Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -35,19 +35,19 @@ public class ListViewAdapter extends BaseAdapter {
         }
     };
 
-    public ListViewAdapter(Context context, List<PageContent> pageContentList) {
+    public ListViewAdapter(Context context, List<PageContentBean> pageContentBeanList) {
         this.mContext = context;
-        this.mPageContentList = pageContentList;
+        this.mPageContentBeanList = pageContentBeanList;
     }
 
     @Override
     public int getCount() {
-        return mPageContentList.size();
+        return mPageContentBeanList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mPageContentList.get(position);
+        return mPageContentBeanList.get(position);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class ListViewAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_username.setText(mPageContentList.get(position).getMedia().getUser().getScreen_name());
-        viewHolder.tv_content.setText(mPageContentList.get(position).getMedia().getQq_share_caption());
-        final String imgUrl = mPageContentList.get(position).getRecommend_cover_pic();
+        viewHolder.tv_username.setText(mPageContentBeanList.get(position).getMedia().getUser().getScreen_name());
+        viewHolder.tv_content.setText(mPageContentBeanList.get(position).getMedia().getQq_share_caption());
+        final String imgUrl = mPageContentBeanList.get(position).getRecommend_cover_pic();
         Request.Builder builder = new Request.Builder().url(imgUrl);
         Request.newRequest(builder, new HttpCallback() {
             @Override

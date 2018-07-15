@@ -25,13 +25,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int GETRESULT = 0;
     private ListView mListView;
     private Context mContext;
-    List<PageContent> mPageContentList = new ArrayList<>();
+    List<PageContentBean> mPageContentBeanList = new ArrayList<>();
     public Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == GETRESULT) {
-                mListView.setAdapter(new ListViewAdapter(mContext, mPageContentList));
+                mListView.setAdapter(new ListViewAdapter(mContext, mPageContentBeanList));
             }
         }
     };
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                         String strJson = (String) response.getContent();
                         JSONArray jsonArray = new JSONArray(strJson);
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            mPageContentList.add(JsonDecoder.parseJsonToObject(PageContent.class, jsonArray.getJSONObject(i)));
+                            mPageContentBeanList.add(JsonDecoder.parseJsonToObject(PageContentBean.class, jsonArray.getJSONObject(i)));
                         }
                         mMainHandler.obtainMessage(GETRESULT).sendToTarget();
                     } catch (JSONException e) {

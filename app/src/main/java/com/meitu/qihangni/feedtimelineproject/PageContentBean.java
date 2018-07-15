@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author nqh 2018/7/11
  */
-public class PageContent {
+public class PageContentBean {
     /**
      * recommend_caption : #甜甜的#
      * recommend_cover_pic : http://mppic-test.zone1.meitudata.com/5ad04c124ffc45322.jpg!thumb320
