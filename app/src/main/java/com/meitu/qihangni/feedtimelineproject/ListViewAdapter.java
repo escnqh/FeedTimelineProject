@@ -11,23 +11,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.meitu.qihangni.feedtimelineproject.bitmapLoader.BitmapUtil;
-import com.meitu.qihangni.feedtimelineproject.jsonDecoder.PageContent;
-import com.meitu.qihangni.feedtimelineproject.networkTool.HttpCallback;
-import com.meitu.qihangni.feedtimelineproject.networkTool.Request;
-import com.meitu.qihangni.feedtimelineproject.networkTool.Response;
-
-import java.util.ArrayList;
+import com.meitu.qihangni.feedtimelineproject.networktool.HttpCallback;
+import com.meitu.qihangni.feedtimelineproject.networktool.Request;
+import com.meitu.qihangni.feedtimelineproject.networktool.Response;
 import java.util.List;
 
 /**
  * @author nqh 2018/7/13
  */
 public class ListViewAdapter extends BaseAdapter {
-    private Context mContext;
+    private final Context mContext;
     private static final int MESSAGE_POST_RESULT = 1;
-    private List<PageContent> mPageContentList = new ArrayList<>();
+    private final List<PageContent> mPageContentList;
     public Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -39,7 +34,6 @@ public class ListViewAdapter extends BaseAdapter {
             }
         }
     };
-
 
     public ListViewAdapter(Context context, List<PageContent> pageContentList) {
         this.mContext = context;
@@ -77,16 +71,6 @@ public class ListViewAdapter extends BaseAdapter {
         viewHolder.tv_username.setText(mPageContentList.get(position).getMedia().getUser().getScreen_name());
         viewHolder.tv_content.setText(mPageContentList.get(position).getMedia().getQq_share_caption());
         final String imgUrl = mPageContentList.get(position).getRecommend_cover_pic();
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Bitmap bitmap = BitmapUtil.getBitmap(imgUrl);
-//                RequestObj requestObj = new RequestObj(bitmap, viewHolder.imgv_cover);
-//                mMainHandler.obtainMessage(MESSAGE_POST_RESULT, requestObj).sendToTarget();
-//            }
-//        }).start();
-
         Request.Builder builder = new Request.Builder().url(imgUrl);
         Request.newRequest(builder, new HttpCallback() {
             @Override
@@ -94,7 +78,7 @@ public class ListViewAdapter extends BaseAdapter {
                 if (response.getContent() instanceof Bitmap) {
                     viewHolder.imgv_cover.setImageBitmap((Bitmap) response.getContent());
                     RequestObj requestObj = new RequestObj((Bitmap) response.getContent(), viewHolder.imgv_cover);
-                    mMainHandler.obtainMessage(MESSAGE_POST_RESULT,requestObj).sendToTarget();
+                    mMainHandler.obtainMessage(MESSAGE_POST_RESULT, requestObj).sendToTarget();
                 }
             }
 
@@ -113,7 +97,6 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     private class RequestObj {
-
         Bitmap bitmap;
         ImageView imageView;
 

@@ -1,4 +1,4 @@
-package com.meitu.qihangni.feedtimelineproject.networkTool;
+package com.meitu.qihangni.feedtimelineproject.networktool;
 
 /**
  * 枚举一下请求方法的类型

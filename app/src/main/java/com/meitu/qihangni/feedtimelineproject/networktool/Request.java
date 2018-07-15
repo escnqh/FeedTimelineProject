@@ -1,13 +1,6 @@
-package com.meitu.qihangni.feedtimelineproject.networkTool;
+package com.meitu.qihangni.feedtimelineproject.networktool;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,17 +14,15 @@ import java.util.List;
  */
 public class Request {
     private final String TAG = this.getClass().getName();
-
+    private static volatile boolean isInitContentHandlerFactory = false;
     //设置超时
     private final static int CONNECT_TIME_OUT_MILLISECOND = 10000;
     private final static int READ_TIME_OUT_MILLISECOND = 20000;
-
     private String mUrl;
     private List<String> mParams;
     private List<String> mHeaders;
     private String mString;
     private HttpMethod mMethod;
-
     private HttpURLConnection mConnection;
     private static HttpCallback mHttpCallback;
 
@@ -43,25 +34,20 @@ public class Request {
         this.mString = builder.string;
     }
 
-    /**
-     * 新建请求方式1
-     *
-     * @param builder
-     * @return
-     */
     public static Request newRequest(Builder builder) {
         return newRequest(builder, null);
     }
 
-
-    /**
-     * 新建请求方式2
-     *
-     * @param builder
-     * @param httpCallback 返回接口
-     * @return
-     */
     public static Request newRequest(Builder builder, HttpCallback httpCallback) {
+        //这里做只有一次的ContentHandlerFactory实现类替换
+        if (!isInitContentHandlerFactory) {
+            synchronized (Request.class) {
+                if (!isInitContentHandlerFactory) {
+                    isInitContentHandlerFactory = true;
+                    URLConnection.setContentHandlerFactory(new ContentHandlerFactoryImpl());
+                }
+            }
+        }
         mHttpCallback = httpCallback;
         return new Request(builder);
     }
@@ -81,7 +67,6 @@ public class Request {
         if (mMethod == HttpMethod.POST) {
             post();
         } else if (mMethod == HttpMethod.GET) {
-
             get();
         }
         return response(mConnection);
@@ -91,7 +76,6 @@ public class Request {
      * get请求
      */
     private void get() throws IOException {
-        Log.i(TAG, "   " + mUrl);
         URL requestUrl = new URL(getUrl(mUrl));
         mConnection = (HttpURLConnection) requestUrl.openConnection();
         mConnection.setRequestMethod(String.valueOf(mMethod));
@@ -170,9 +154,6 @@ public class Request {
         }
     }
 
-    /**
-     * 设置请求头
-     */
     private void connectHeaders() {
         if (mHeaders != null && mHeaders.size() > 0) {
             for (int i = 0; i < mHeaders.size(); i += 2) {
@@ -181,11 +162,8 @@ public class Request {
         }
     }
 
-    /**
-     * 获取响应结果
-     */
     private Response response(HttpURLConnection connection) throws IOException {
-        Response resp = new Response.Builder()
+        Response response = new Response.Builder()
                 .code(connection.getResponseCode())
                 .message(connection.getResponseMessage())
                 .method(connection.getRequestMethod())
@@ -194,11 +172,10 @@ public class Request {
                 .content(connection.getContent())
                 .build();
         connection.disconnect();
-        return resp;
+        return response;
     }
 
     public static class Builder {
-
         private String url;
         private List<String> params = new ArrayList<>();
         private List<String> headers = new ArrayList<>();

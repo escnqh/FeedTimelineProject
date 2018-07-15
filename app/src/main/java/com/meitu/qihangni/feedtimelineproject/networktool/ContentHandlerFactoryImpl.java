@@ -1,6 +1,5 @@
-package com.meitu.qihangni.feedtimelineproject.networkTool;
+package com.meitu.qihangni.feedtimelineproject.networktool;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
@@ -13,10 +12,11 @@ import java.net.URLConnection;
 import java.util.Objects;
 
 /**
+ * 通过setContentHandlerFactory()方法设置重写getContent()，在拿到inputstream之后直接处理返回相应对象
+ *
  * @author nqh 2018/7/13
  */
 public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
-
     private static final String DEFAULT_ENCODING = "UTF-8";
     private final String TAG = this.getClass().getName();
 
@@ -44,9 +44,9 @@ public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
                 return connection.getInputStream();
             } else {
                 String encoding = connection.getHeaderField("Content-Type");
-                if (Objects.requireNonNull(getType(encoding))[0].equals( "application")) {
-                    if (Objects.requireNonNull(getType(encoding))[1] .equals("json")) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+                if (Objects.requireNonNull(getType(encoding))[0].equals("application")) {
+                    if (Objects.requireNonNull(getType(encoding))[1].equals("json")) {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
                         String temp = null;
                         StringBuilder content = new StringBuilder();
                         while ((temp = reader.readLine()) != null) {
@@ -54,9 +54,11 @@ public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
                         }
                         return content.toString();
                     }
-                } else if (Objects.requireNonNull(getType(encoding))[0] .equals("image") ) {
-                    Bitmap bitmap = BitmapFactory.decodeStream(connection.getInputStream());
-                    return bitmap;
+                } else if (Objects.requireNonNull(getType(encoding))[0].equals("image")) {
+                    return BitmapFactory.decodeStream(connection.getInputStream());
+                } else {
+                    //todo 拓展跟多方法
+                    return null;
                 }
             }
             return null;

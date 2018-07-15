@@ -1,6 +1,4 @@
-package com.meitu.qihangni.feedtimelineproject.networkTool;
-
-import java.io.InputStream;
+package com.meitu.qihangni.feedtimelineproject.networktool;
 
 /**
  * 响应结果实体
@@ -8,7 +6,6 @@ import java.io.InputStream;
  * @author nqh 2018/7/11
  */
 public class Response {
-
     private final int mCode;
     private final String mMessage;
     private final String mMethod;
@@ -16,7 +13,7 @@ public class Response {
     private final int mContentLength;
     private final Object mContent;
 
-    public Response(Builder builder) {
+    Response(Builder builder) {
         this.mCode = builder.code;
         this.mMessage = builder.message;
         this.mMethod = builder.method;
