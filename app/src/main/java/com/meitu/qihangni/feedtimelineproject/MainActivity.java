@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(Response response) {
                 if (response.getContent() instanceof String) {
-
                     try {
                         String strJson = (String) response.getContent();
                         JSONArray jsonArray = new JSONArray(strJson);
@@ -56,12 +55,10 @@ public class MainActivity extends AppCompatActivity {
                             mPageContentList.add(JsonDecoder.parseJsonToObject(PageContent.class, jsonArray.getJSONObject(i)));
                         }
                         mMainHandler.obtainMessage(GETRESULT).sendToTarget();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
             }
 
             @Override
