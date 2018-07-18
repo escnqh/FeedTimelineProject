@@ -30,7 +30,7 @@ public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
         }
     }
 
-    class ContentHandlerImpl extends ContentHandler {
+    static class ContentHandlerImpl extends ContentHandler {
 
         private boolean transform = false;
 
@@ -57,7 +57,7 @@ public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
                 } else if (Objects.requireNonNull(getType(encoding))[0].equals("image")) {
                     return BitmapFactory.decodeStream(connection.getInputStream());
                 } else {
-                    //todo 拓展跟多方法
+                    //todo 拓展更多方法
                     return null;
                 }
             }

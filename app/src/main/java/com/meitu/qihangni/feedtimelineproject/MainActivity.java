@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.meitu.qihangni.feedtimelineproject.bean.PageContentBean;
 import com.meitu.qihangni.feedtimelineproject.jsondecoder.JsonDecoder;
 import com.meitu.qihangni.feedtimelineproject.networktool.HttpCallback;
 import com.meitu.qihangni.feedtimelineproject.networktool.Request;

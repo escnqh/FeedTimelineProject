@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.meitu.qihangni.feedtimelineproject.bean.PageContentBean;
 import com.meitu.qihangni.feedtimelineproject.networktool.HttpCallback;
 import com.meitu.qihangni.feedtimelineproject.networktool.Request;
 import com.meitu.qihangni.feedtimelineproject.networktool.Response;
