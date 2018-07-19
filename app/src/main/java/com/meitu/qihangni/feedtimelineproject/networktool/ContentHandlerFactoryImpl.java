@@ -18,11 +18,11 @@ import java.util.Objects;
  */
 public class ContentHandlerFactoryImpl implements ContentHandlerFactory {
     private static final String DEFAULT_ENCODING = "UTF-8";
-    private final String TAG = this.getClass().getName();
+    private final static String TAG = ContentHandlerFactoryImpl.class.getName();
+    private static boolean is = false;
 
     @Override
     public ContentHandler createContentHandler(String mimetype) {
-        Log.i(TAG, "mimetype is :" + mimetype);
         if (null == mimetype) {
             return new ContentHandlerImpl(false);
         } else {

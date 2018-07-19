@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,17 @@ import android.widget.TextView;
 
 import com.meitu.qihangni.feedtimelineproject.bean.PageContentBean;
 import com.meitu.qihangni.feedtimelineproject.networktool.HttpCallback;
+import com.meitu.qihangni.feedtimelineproject.networktool.HttpClient;
 import com.meitu.qihangni.feedtimelineproject.networktool.Request;
 import com.meitu.qihangni.feedtimelineproject.networktool.Response;
+
 import java.util.List;
 
 /**
  * @author nqh 2018/7/13
  */
 public class ListViewAdapter extends BaseAdapter {
+    private final static String TAG = ListViewAdapter.class.getName();
     private final Context mContext;
     private static final int MESSAGE_POST_RESULT = 1;
     private final List<PageContentBean> mPageContentBeanList;
@@ -63,23 +67,24 @@ public class ListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_itemview, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.imgv_cover = convertView.findViewById(R.id.imgv_cover);
-            viewHolder.tv_content = convertView.findViewById(R.id.tv_content);
-            viewHolder.tv_username = convertView.findViewById(R.id.tv_username);
+            viewHolder.mImageCover = convertView.findViewById(R.id.imgv_cover);
+            viewHolder.mTvContent = convertView.findViewById(R.id.tv_content);
+            viewHolder.mTvName = convertView.findViewById(R.id.tv_username);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_username.setText(mPageContentBeanList.get(position).getMedia().getUser().getScreen_name());
-        viewHolder.tv_content.setText(mPageContentBeanList.get(position).getMedia().getQq_share_caption());
+        viewHolder.mTvName.setText(mPageContentBeanList.get(position).getMedia().getUser().getScreen_name());
+        viewHolder.mTvContent.setText(mPageContentBeanList.get(position).getMedia().getQq_share_caption());
         final String imgUrl = mPageContentBeanList.get(position).getRecommend_cover_pic();
-        Request.Builder builder = new Request.Builder().url(imgUrl);
-        Request.newRequest(builder, new HttpCallback() {
+        Request request = new Request.Builder()
+                .url(imgUrl)
+                .build();
+        HttpClient.newRequest(request, new HttpCallback() {
             @Override
             public void onComplete(Response response) {
                 if (response.getContent() instanceof Bitmap) {
-                    viewHolder.imgv_cover.setImageBitmap((Bitmap) response.getContent());
-                    RequestObj requestObj = new RequestObj((Bitmap) response.getContent(), viewHolder.imgv_cover);
+                    RequestObj requestObj = new RequestObj((Bitmap) response.getContent(), viewHolder.mImageCover);
                     mMainHandler.obtainMessage(MESSAGE_POST_RESULT, requestObj).sendToTarget();
                 }
             }
@@ -88,14 +93,14 @@ public class ListViewAdapter extends BaseAdapter {
             public void onError(Throwable e) {
 
             }
-        }).executeAsync();
+        }).execute();
         return convertView;
     }
 
     private static class ViewHolder {
-        ImageView imgv_cover;
-        TextView tv_username;
-        TextView tv_content;
+        ImageView mImageCover;
+        TextView mTvName;
+        TextView mTvContent;
     }
 
     private class RequestObj {

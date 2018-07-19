@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.meitu.qihangni.feedtimelineproject.bean.PageContentBean;
 import com.meitu.qihangni.feedtimelineproject.jsondecoder.JsonDecoder;
 import com.meitu.qihangni.feedtimelineproject.networktool.HttpCallback;
+import com.meitu.qihangni.feedtimelineproject.networktool.HttpClient;
 import com.meitu.qihangni.feedtimelineproject.networktool.Request;
 import com.meitu.qihangni.feedtimelineproject.networktool.Response;
 
@@ -43,9 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mListView = findViewById(R.id.listview);
         mContext = this;
-        Request.Builder builder = new Request.Builder()
-                .url("http://preapi.meipai.com/hot/feed_timeline.json?page=2");
-        Request.newRequest(builder, new HttpCallback() {
+        Request request = new Request.Builder()
+                .url("http://preapi.meipai.com/hot/feed_timeline.json?page=2")
+                .build();
+        HttpClient.newRequest(request, new HttpCallback() {
             @Override
             public void onComplete(Response response) {
                 if (response.getContent() instanceof String) {
@@ -66,6 +68,6 @@ public class MainActivity extends AppCompatActivity {
             public void onError(Throwable e) {
                 Log.e(TAG, "onError:" + e.getMessage());
             }
-        }).executeAsync();
+        }).execute();
     }
 }

@@ -83,13 +83,13 @@ public class JsonDecoder {
                             method.invoke(t, parseJsonToObject(type, jsonObject.optJSONObject(attributeName)));
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
                     }
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return t;
     }
